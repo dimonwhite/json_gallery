@@ -98,7 +98,9 @@ function showImage(item){
   document.querySelector('.overlay').style.display = 'block';
 }
 
-document.querySelector('.overlay').setAttribute('onclick', 'hideImage(this)');
+document.querySelector('.overlay').onclick = function(){
+  hideImage(this)
+};
 
 function hideImage(item){
   item.style.display = 'none';

@@ -1,0 +1,148 @@
+html, body{
+	width: 100%;
+	margin: 0;
+	height: 100vh;
+	font-family: 'Roboto', sans-serif;
+}
+
+body>div{
+	float: left;
+}
+
+div{
+	border: 3px solid #000;
+	box-sizing: border-box;
+}
+
+.album div{
+	border: none;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  text-align: center;
+  z-index: 5;
+}
+
+.overlay img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  max-width: 90%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.prev_album, .next_album{
+	height: 100%;
+	width: 10%;
+	position: relative;
+}
+
+.album_main{
+	width: 80%;
+	height: 100%;
+}
+
+.title_album{
+	height: 10%;
+	position: relative;
+}
+
+.album{
+	height: 90%;
+	overflow-y: scroll;
+}
+
+.title_album h1{
+	text-align: center;
+	padding: 0;
+	text-transform: uppercase;
+	width: 90%;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.album div{
+	width: calc(100%/3);
+	float: left;
+	padding: 30px;
+}
+
+.album div img{
+	height: 100%;
+	width: 100%;
+	cursor: pointer;
+}
+
+.image-list{
+	height: 100%;
+}
+
+
+.prev_album button, .next_album button{
+	width: 100%;
+	height: 100%;
+	background-color: transparent;
+	outline: none;
+	border: none;
+	cursor: pointer;
+}
+
+.prev_album button:before, .next_album button:before{
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	border: 15px solid transparent;
+	border-left: 15px solid #000;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	margin-left: 5px;
+}
+
+.prev_album button:before{
+	border: 15px solid transparent;
+	border-right: 15px solid #000;
+	margin-left: -5px;
+}
+
+@media screen and (max-width: 900px){
+	
+	.title{
+		font-size: 22px;
+	}
+
+	.album div{
+		padding: 10px;
+		width: 50%;
+	}
+	
+	div{
+		border: 2px solid #000;
+	}
+
+}
+
+@media screen and (max-width: 500px){
+	
+	.title{
+		font-size: 16px;
+	}
+
+	.album div{
+		padding: 5px;
+		width: 100%;
+	}
+}

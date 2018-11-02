@@ -80,6 +80,10 @@ function showAlbum(number_album, gallery){
       })
     });
 
+  })
+  .catch(function(error) {
+    title.innerHTML = "Ошибка подключения к галереи!";
+    title.style.color = 'red';
   });
 
   button_prev.onclick = function(){
@@ -88,8 +92,6 @@ function showAlbum(number_album, gallery){
   button_next.onclick = function(){
     showAlbum(next, gallery);
   };
-
-
 }
 
 function showImage(item){

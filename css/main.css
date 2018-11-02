@@ -5,7 +5,12 @@ html, body{
 	font-family: 'Roboto', sans-serif;
 }
 
-body>div{
+.gallery{
+	width: 100%;
+	height: 100%;
+}
+
+.gallery>div{
 	float: left;
 }
 

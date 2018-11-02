@@ -6,70 +6,90 @@ function append(parent, el){
   return parent.appendChild(el);
 }
 
-var container = document.querySelector('.album');
+function showAlbum(number_album, gallery){
 
-var title = document.querySelector('.title');
+  var url = 'http://jsonplaceholder.typicode.com/albums/';
 
-var button_next = document.querySelector('.button_next_album');
+  var count_albums;
 
-var button_prev = document.querySelector('.button_prev_album');
+  if(number_album == undefined)
+    number_album = 1;
 
-var url = 'https://jsonplaceholder.typicode.com/albums/';
+  if(gallery == undefined)
+    gallery = "gallery";
 
-var count_albums;
+  gallery_container = document.querySelector('.'+gallery);
 
-fetch(url)
-.then(response => response.json())
-.then(function(data){
+  var album_container = gallery_container.querySelector('.album');
+
+  var title = gallery_container.querySelector('.title');
+
+  var button_next = gallery_container.querySelector('.button_next_album');
+
+  var button_prev = gallery_container.querySelector('.button_prev_album');
+
+  var prev;
+    var next;
+
+  album_container.innerHTML = '';
+
+  fetch(url)
+  .then(response => response.json())
+  .then(function(data){
     count_albums = data.length;
-});
+    console.log(count_albums);
 
-function showAlbum(number_album){
+    if(number_album > count_albums)
+      number_album = count_albums;
 
-  container.innerHTML = '';
+    url += number_album;
 
-  url = 'https://jsonplaceholder.typicode.com/albums/';
+    fetch(url)
+    .then(response => response.json())
+    .then(function(data){
+        title.innerHTML = data.title + ' #' + data.id;
 
-  if(number_album > count_albums)
-    number_album = count_albums;
+        prev = data.id-1;
+        if(prev <= 0)
+          prev = 1;
+        next = data.id+1;
+        
+    });
 
-  url += number_album;
+    url += '/photos';
 
-  fetch(url)
-  .then(response => response.json())
-  .then(function(data){
-      title.innerHTML = data.title;
+    fetch(url)
+    .then(response => response.json())
+    .then(function(data){
 
-      prev = data.id-1;
-      if(prev <= 0)
-        prev = 1;
-      button_prev.setAttribute('onclick', 'showAlbum('+prev+')');
+      return data.map(function(image){
 
-      next = data.id+1;
-      button_next.setAttribute('onclick', 'showAlbum('+next+')');
+        var block = createNode('div'),
+        img = createNode('img');
+
+        img.src = image.thumbnailUrl;
+        img.setAttribute('data-fullimage', image.url);
+        img.onclick = function(){
+          showImage(this);
+        };
+
+        append(block, img);
+
+        append(album_container, block);
+
+      })
+    });
+
   });
 
-  url += '/photos';
+  button_prev.onclick = function(){
+    showAlbum(prev, gallery);
+  };
+  button_next.onclick = function(){
+    showAlbum(next, gallery);
+  };
 
-  fetch(url)
-  .then(response => response.json())
-  .then(function(data){
 
-    return data.map(function(image){
-
-      var block = createNode('div'),
-      img = createNode('img');
-
-      img.src = image.thumbnailUrl;
-      img.setAttribute('data-fullimage', image.url);
-      img.setAttribute('onclick', 'showImage(this)');
-
-      append(block, img);
-
-      append(container, block);
-
-    })
-  });
 }
 
 function showImage(item){

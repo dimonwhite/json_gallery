@@ -6,9 +6,9 @@ function append(parent, el){
   return parent.appendChild(el);
 }
 
-function showAlbum(number_album, gallery){
+function getAlbum(number_album, gallery){
 
-  var url = 'http://jsonplaceholder.typicode.com/albums/';
+  const url = 'http://jsonplaceholder.typicode.com/albums/';
 
   var count_albums;
 
@@ -18,7 +18,7 @@ function showAlbum(number_album, gallery){
   if(gallery == undefined)
     gallery = "gallery";
 
-  gallery_container = document.querySelector('.'+gallery);
+  var gallery_container = document.querySelector('.'+gallery);
 
   var album_container = gallery_container.querySelector('.album');
 
@@ -28,84 +28,80 @@ function showAlbum(number_album, gallery){
 
   var button_prev = gallery_container.querySelector('.button_prev_album');
 
-  var prev;
-    var next;
-
   album_container.innerHTML = '';
 
   fetch(url)
-  .then(response => response.json())
+  .then(function(response){
+    return response.json();
+  })
   .then(function(data){
     count_albums = data.length;
-    console.log(count_albums);
-
-    if(number_album > count_albums)
-      number_album = count_albums;
-
-    url += number_album;
-
-    fetch(url)
-    .then(response => response.json())
-    .then(function(data){
-        title.innerHTML = data.title + ' #' + data.id;
-
-        prev = data.id-1;
-        if(prev <= 0)
-          prev = 1;
-        next = data.id+1;
-        
-    });
-
-    url += '/photos';
-
-    fetch(url)
-    .then(response => response.json())
-    .then(function(data){
-
-      return data.map(function(image){
-
-        var block = createNode('div'),
-        img = createNode('img');
-
-        img.src = image.thumbnailUrl;
-        img.setAttribute('data-fullimage', image.url);
-        img.onclick = function(){
-          showImage(this);
-        };
-
-        append(block, img);
-
-        append(album_container, block);
-
-      })
-    });
-
   })
   .catch(function(error) {
     title.innerHTML = "Ошибка подключения к галереи!";
-    title.style.color = 'red';
+    title.classList.add('error');
   });
 
-  button_prev.onclick = function(){
-    showAlbum(prev, gallery);
-  };
-  button_next.onclick = function(){
-    showAlbum(next, gallery);
-  };
+  fetch(url + number_album)
+  .then(function(response){
+    return response.json();
+  })
+  .then(function(data){
+      title.innerHTML = data.title + ' #' + data.id;
+
+      button_prev.onclick = function(){
+        if(data.id == 1)
+          getAlbum(count_albums, gallery);
+        else
+          getAlbum(data.id - 1, gallery);
+      };
+      button_next.onclick = function(){
+        if(data.id == count_albums)
+          getAlbum(1, gallery);
+        else
+          getAlbum(data.id + 1, gallery);
+      };
+  })
+  .catch(function(error) {
+    title.innerHTML = "Ошибка подключения к галереи!";
+    title.classList.add('error');
+  });
+
+  fetch(url + number_album + '/photos')
+  .then(function(response){
+    return response.json();
+  })
+  .then(function(data){
+
+    return data.map(function(image){
+
+      var block = createNode('div'),
+      img = createNode('img');
+
+      block.classList.add('album_image');
+      img.src = image.thumbnailUrl;
+      img.setAttribute('data-fullimage', image.url);
+      img.onclick = function(){
+        openImage(this);
+      };
+      append(block, img);
+      append(album_container, block);
+    })
+  })
+  .catch(function(error) {
+    title.innerHTML = "Ошибка подключения к галереи!";
+    title.classList.add('error');
+  });
 }
 
-function showImage(item){
+function openImage(item){
   console.log(item.getAttribute('data-fullimage'));
   document.querySelector('.fullSize').src = item.getAttribute('data-fullimage');
-  document.querySelector('.overlay').style.display = 'block';
+  document.querySelector('.overlay').classList.add('active');
 }
 
 document.querySelector('.overlay').onclick = function(){
-  hideImage(this)
-};
-
-function hideImage(item){
-  item.style.display = 'none';
+  this.classList.remove('active');
 }
 
-showAlbum(1);
+getAlbum();

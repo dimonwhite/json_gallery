@@ -19,10 +19,6 @@ div{
 	box-sizing: border-box;
 }
 
-.album div{
-	border: none;
-}
-
 .overlay {
   background: rgba(0, 0, 0, 0.7);
   width: 100%;
@@ -35,7 +31,11 @@ div{
   z-index: 5;
 }
 
-.overlay img {
+.overlay.active{
+	display: block;
+}
+
+.overlay img{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -66,7 +66,7 @@ div{
 	overflow-y: scroll;
 }
 
-.title_album h1{
+.title_album .title{
 	text-align: center;
 	padding: 0;
 	text-transform: uppercase;
@@ -79,13 +79,18 @@ div{
 	transform: translate(-50%, -50%);
 }
 
-.album div{
+.error{
+	color: #ff0000;
+}
+
+.album .album_image{
 	width: calc(100%/3);
 	float: left;
 	padding: 30px;
+	border: none;
 }
 
-.album div img{
+.album .album_image img{
 	height: 100%;
 	width: 100%;
 	cursor: pointer;

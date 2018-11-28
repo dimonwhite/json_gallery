@@ -24,6 +24,11 @@ function getGallery(number_album, gallery){
   var button_next = gallery_container.querySelector('.button_next_album');
   var button_prev = gallery_container.querySelector('.button_prev_album');
 
+  if(title.classList.contains('error')){
+    title.classList.remove('error');
+    number_album = 1;
+  }
+
   album_container.innerHTML = '';
 
   function getTitleAlbum(){
